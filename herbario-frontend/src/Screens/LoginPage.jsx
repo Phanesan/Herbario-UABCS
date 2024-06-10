@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom'
+import { fetchLoginAPI, setClientToken } from '../Services/HerbarioService';
 
 function LoginPage() {
   const navigate = useNavigate();
+  const [loginForm, setLoginForm] = useState({
+    correo : "",
+    password : ""
+  });
+
+  async function handleLogin() {
+    try {
+      const response = await fetchLoginAPI(loginForm)
+      setClientToken(response)
+      window.localStorage.setItem("token", response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  function handleChange(e){
+    const {
+      name, value
+    } = e.target;
+    setLoginForm(prevState => ({...prevState, [name] : value}))
+  }
+
   return (
     <>
       <div className="flex min-h-screen items-center justify-center bg-[#B9E2BC]">
@@ -19,7 +42,6 @@ function LoginPage() {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" action="#" method="POST">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                   Correo Electrónico
@@ -27,11 +49,12 @@ function LoginPage() {
                 <div className="mt-2">
                   <input
                     id="email"
-                    name="email"
+                    name="correo"
                     type="email"
                     autoComplete="email"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-zinc-600 sm:text-sm sm:leading-6"
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -50,20 +73,19 @@ function LoginPage() {
                     autoComplete="current-password"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-zinc-600 sm:text-sm sm:leading-6"
+                    onChange={handleChange}
                   />
                 </div>
               </div>
 
               <div>
                 <button
-                  type="submit"
                   className="flex w-full justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:scale-110 transition-all duration-300 hover:bg-green-800"
-                  onClick={()=>{navigate('/')}}
+                  onClick={handleLogin}
                 >
                   Iniciar Sesión
                 </button>
               </div>
-            </form>
           </div>
           <p className="mt-10 text-center text-sm text-gray-500">
             ¿No tienes cuenta?{' '}
@@ -76,5 +98,7 @@ function LoginPage() {
     </>
   );
 }
+
+
 
 export default LoginPage;
