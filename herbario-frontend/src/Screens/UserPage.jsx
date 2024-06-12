@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom'
 import ImageUpload from '../assets/Components/ImageUpload';
+import useUserStore from '../Global/UserStore';
 
 const UserPage = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState('Perfil');
+  const {setToken} = useUserStore((state)=>state);
+
+  const handleLogOut = () => {
+    setToken(false) , 
+    window.localStorage.removeItem("token") , 
+    navigate('/LoginPage')
+  }
 
   const renderContent = () => {
     switch (selectedOption) {
@@ -34,10 +42,10 @@ const UserPage = () => {
           <button onClick={() => setSelectedOption('Historial')} className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200">
             Historial de aprobaciones
           </button>
-          <button onClick={() => setSelectedOption('Historial')} className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200">
+          <button onClick={() => {navigate('/RegisterPlant')}} className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200">
             Registrar Observación
           </button>
-          <button onClick={()=>{navigate('/LoginPage')}} className="block text-2xl mb-8 p-4 border border-black bg-[#FF0000] text-[#FFFFFF] rounded-lg shadow-md hover:scale-110 transition-all hover:bg-red-700">
+          <button onClick={handleLogOut} className="block text-2xl mb-8 p-4 border border-black bg-[#FF0000] text-[#FFFFFF] rounded-lg shadow-md hover:scale-110 transition-all hover:bg-red-700">
             Cerrar Sesión
           </button>
         </div>

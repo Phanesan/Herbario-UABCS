@@ -22,3 +22,16 @@ export async function fetchRegisterAPI (body){
     console.log(response)
     return response.data
 }
+
+export async function fetchRegisterPlantAPI (body){
+    const response = await routeAPI.post("planta", body)
+    console.log(response)
+    return response.data
+}
+
+export async function fetchPlanta() {
+    const resultP = await routeAPI.get("planta");
+    console.log(resultP);
+  
+    return resultP.data;
+  }
