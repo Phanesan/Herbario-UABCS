@@ -3,7 +3,6 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import ProfileIcon from '../icons/ProfileIcon';
 import { setClientToken } from '../../Services/HerbarioService';
 import useUserStore from '../../Global/UserStore';
-import SadIcon from '../icons/logIcon';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -25,10 +24,10 @@ const NavBar = () => {
             src="https://i.imgur.com/OB8SF4I.png" 
             alt="Logo" 
             className="object-cover w-16 h-16 cursor-pointer" 
-            onClick={()=>{navigate('/')}} 
+            onClick={()=>{token && navigate('/Home')}} 
           />
         </picture>
-        <h1 className='font-bold text-4xl ml-4 cursor-pointer' onClick={()=>{navigate('/')}}>Flora UABCS</h1 >
+        <h1 className='font-bold text-4xl ml-4 cursor-pointer' onClick={()=>{token && navigate('/Home')}}>Flora UABCS</h1 >
       </div>
       <div className='ml-auto flex items-center space-x-6'>
       <picture>
@@ -39,7 +38,7 @@ const NavBar = () => {
             onClick={()=>{  navigate('/SearchPage')}} 
           />
         </picture>
-        {token ? <button className="bg-green-700/70 rounded-full hover:scale-110 transition hover:bg-green-700 text-white" onClick={()=>{navigate('/UserPage')}} ><ProfileIcon style={"w-12 h-12"}></ProfileIcon></button>: <button className="bg-green-700/70 rounded-full hover:scale-110 transition hover:bg-green-700 text-white" onClick={()=>{navigate('/LoginPage')}} ><SadIcon style={"w-12 h-12"}></SadIcon></button>}
+        {token && <button className="bg-green-700/70 rounded-full hover:scale-110 transition hover:bg-green-700 text-white" onClick={()=>{navigate('/UserPage')}} ><ProfileIcon style={"w-12 h-12"}></ProfileIcon></button>}
       </div>
     </div>
   )

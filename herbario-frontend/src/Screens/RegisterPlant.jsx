@@ -1,61 +1,35 @@
-import React, { useState } from "react";
-import { fetchRegisterPlantAPI } from "../Services/HerbarioService";
+import React, { useState } from 'react';
+import { fetchRegisterPlantAPI } from '../Services/HerbarioService';
 
 const RegisterPlant = () => {
-  const [plantForm, setPlantForm] = useState({
-    nombre_cientifico: "",
-    nombre_comun: "",
-    familia: "",
-    forma_biologica: "",
-    tipo_vegetacion: "",
-    vulnerada: false,
-    informacion_adicional: "",
-  });
-
-  const [message, setMessage] = useState(null);
+    
+    const [plantForm, setPlantForm] = useState({
+        nombre_cientifico: "",
+        nombre_comun: "",
+        familia: "",
+        forma_biologica: "",
+        tipo_vegetacion: "",
+        vulnerada: false,
+        informacion_adicional: ""
+      });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setPlantForm((prevData) => ({
+      const { name, value } = e.target;
+    setPlantForm((prevData) => (name != "vulnerada" ? {
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+      [name]: value ,
+    }:{...prevData, [name]: value == "on" ?true:false}));
   };
 
-  const handleRegisterPlant = async () => {
-    try {
+  async function handleRegisterPlant() {
+    console.log(plantForm)
       const response = await fetchRegisterPlantAPI(plantForm);
-      console.log("Response Status:", response.status);
-      console.log("Response OK:", response.ok);
+  }
 
-      if (response.status) {
-        setMessage({
-          type: "success",
-          text: "Planta registrada correctamente.",
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 700);
-      } else {
-        const errorData = await response.json();
-        console.log("Error Data:", errorData);
-        setMessage({
-          type: "error",
-          text: errorData.message || "Error al registrar la planta",
-        });
-      }
-    } catch (error) {
-      console.log("Catch Error:", error);
-      setMessage({
-        type: "error",
-        text: "No se pudo registrar la planta. Inténtalo de nuevo.",
-      });
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleRegisterPlant();
+    console.log(plantForm);
   };
 
   return (
@@ -64,27 +38,13 @@ const RegisterPlant = () => {
         <h2 className="mt-0 mb-8 text-3xl font-bold leading-9 text-gray-900 pl-6">
           Registro de Planta
         </h2>
-        {message && (
-          <div
-            className={`mb-4 p-4 rounded ${
-              message.type === "success"
-                ? "bg-green-200 text-green-800"
-                : "bg-red-200 text-red-800"
-            }`}
-          >
-            {message.text}
-          </div>
-        )}
-        <form onSubmit={handleSubmit}>
+
           <div className="mb-4">
-            <label
-              htmlFor="nombre_cientifico"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="scientificName" className="block text-sm font-medium leading-6 text-gray-900">
               Nombre Científico
             </label>
             <input
-              id="nombre_cientifico"
+              id="scientificName"
               name="nombre_cientifico"
               type="text"
               autoComplete="off"
@@ -95,14 +55,11 @@ const RegisterPlant = () => {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="nombre_comun"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="commonName" className="block text-sm font-medium leading-6 text-gray-900">
               Nombre Común
             </label>
             <input
-              id="nombre_comun"
+              id="commonName"
               name="nombre_comun"
               type="text"
               autoComplete="off"
@@ -113,10 +70,7 @@ const RegisterPlant = () => {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="familia"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="familia" className="block text-sm font-medium leading-6 text-gray-900">
               Familia
             </label>
             <input
@@ -131,11 +85,8 @@ const RegisterPlant = () => {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="forma_biologica"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Forma Biológica
+            <label htmlFor="biologicForm" className="block text-sm font-medium leading-6 text-gray-900">
+              Forma Biologica
             </label>
             <input
               id="forma_biologica"
@@ -149,10 +100,7 @@ const RegisterPlant = () => {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="tipo_vegetacion"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="vegetation" className="block text-sm font-medium leading-6 text-gray-900">
               Tipo de Vegetación
             </label>
             <input
@@ -167,10 +115,7 @@ const RegisterPlant = () => {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="vulnerada"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="vulnerada" className="block text-sm font-medium leading-6 text-gray-900">
               ¿Vulnerada?
             </label>
             <div className="mt-2 flex items-center">
@@ -184,16 +129,13 @@ const RegisterPlant = () => {
               <span className="ml-2 text-sm text-gray-900">Sí</span>
             </div>
           </div>
-
+          
           <div className="mb-4">
-            <label
-              htmlFor="informacion_adicional"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="additionalInfo" className="block text-sm font-medium leading-6 text-gray-900">
               Información Adicional
             </label>
             <textarea
-              id="informacion_adicional"
+              id="additionalInfo"
               name="informacion_adicional"
               rows="4"
               autoComplete="off"
@@ -207,11 +149,11 @@ const RegisterPlant = () => {
             <button
               className="w-full py-2 text-white bg-green-600 rounded-md font-semibold hover:bg-green-700 transition duration-300"
               type="submit"
+              onClick={handleRegisterPlant}
             >
               Registrar Planta
             </button>
           </div>
-        </form>
       </div>
     </div>
   );
