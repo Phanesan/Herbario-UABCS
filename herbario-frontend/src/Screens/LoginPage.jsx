@@ -21,7 +21,7 @@ function LoginPage() {
         window.localStorage.setItem("token", response);
         console.log(localStorage.getItem("token"))
         setToken(true)
-        navigate('/Home');
+        navigate('/');
       } else {
         setErrorMessage("Credenciales incorrectas");
       }

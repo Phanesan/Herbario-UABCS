@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMapEvents, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import Markers from "./Markers";
 import MarkerCard from "../assets/Components/MarkerCard";
 import useCardStore from "../Global/CardStore";
-import { fetchObtainObservationAPI } from "../Services/HerbarioService";
 
-const MapView = ({ setCoords }) => {
+const MapRegisterView = ({ setCoords, onMarkerClick }) => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [marker, setMarker] = useState(null);
@@ -31,15 +29,6 @@ const MapView = ({ setCoords }) => {
         console.error("Error getting location:", error);
       }
     );
-
-    const obtainObservations = async () => {
-      try {
-        const response = await fetchObtainObservationAPI();
-        console.log(response);
-        setMarker(response.message);
-      } catch (error) {}
-    };
-    obtainObservations();
   }, []);
 
   useEffect(() => {
@@ -54,6 +43,12 @@ const MapView = ({ setCoords }) => {
 
   const MapEvents = () => {
     const map = useMapEvents({
+      click: (e) => {
+        const { lat, lng } = e.latlng;
+        setMarker({ lat, lng });
+        setCoords({ lat: lat.toFixed(6), lng: lng.toFixed(6) });
+        onMarkerClick({ lat, lng });
+      },
       moveend: () => {
         const center = map.getCenter();
         const zoom = map.getZoom();
@@ -87,22 +82,12 @@ const MapView = ({ setCoords }) => {
           zoom={viewCoords.zoom}
           style={{ height: "93vh", width: "100%" }}
         >
-          {marker &&
-            marker.map((item, index) => {
-              return (
-                <Markers
-                  key={index}
-                  lat={item.latitud}
-                  lng={item.longitud}
-                  data={item}
-                ></Markers>
-              );
-            })}
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           <MapEvents />
+          {marker && <Marker position={[marker.lat, marker.lng]} />}
         </MapContainer>
       ) : (
         <p>Loading map...</p>
@@ -111,4 +96,4 @@ const MapView = ({ setCoords }) => {
   );
 };
 
-export default MapView;
+export default MapRegisterView;
