@@ -17,25 +17,18 @@ const MapView = ({ setCoords }) => {
   const [viewCoords, setViewCoords] = useState({
     lat: null,
     lng: null,
-    zoom: 20,
+    zoom: 7.3,
     bounds: null,
   });
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-      }
-    );
+    setLatitude(25.571426);
+    setLongitude(-111.534240);
 
     const obtainObservations = async () => {
       try {
         const response = await fetchObtainObservationAPI();
-        console.log(response);
+        console.log("MARKER:",response);
         setMarker(response.message);
       } catch (error) {}
     };

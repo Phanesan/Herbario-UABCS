@@ -36,11 +36,11 @@ const PlantView = () => {
           {selectedPlanta[0]?.nombre_cientifico}
         </h1>
         <div className="bg-white p-4 rounded shadow-2xl mt-4 w-11/12">
-          <p className="text-lg text-gray-700 font-bold">Nombre comun</p>
+          <p className="text-lg text-gray-700 font-bold">Nombre común</p>
           <p className="text-lg text-gray-500">
             {selectedPlanta[0]?.nombre_comun}
           </p>
-          <p className="text-lg text-gray-700 font-bold">Forma Biologica</p>
+          <p className="text-lg text-gray-700 font-bold">Forma Biológica</p>
           <p className="text-lg text-gray-500">
             {selectedPlanta[0]?.forma_biologica}
           </p>
