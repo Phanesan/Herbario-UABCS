@@ -56,7 +56,7 @@ function RegisterObservation() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(file);
-        setPreviewImage(file);
+        setPreviewImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
