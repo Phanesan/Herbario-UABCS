@@ -33,7 +33,7 @@ function MarkerCard({ nombreCientifico }) {
       </div>
       <div className="h-60 bg-gray-200 rounded-md mb-4 overflow-hidden">
         <img
-          src={`http://localhost:3000/files/${data.imagenes.rutas[0]}`}
+          src={`${import.meta.env.VITE_API_ROUTE}files/${data.imagenes.rutas[0]}`}
           alt=""
           className="w-full h-full object-cover"
         />
