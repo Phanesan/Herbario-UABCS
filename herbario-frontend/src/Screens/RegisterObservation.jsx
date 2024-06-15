@@ -11,6 +11,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 function RegisterObservation() {
   const [image, setImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const [coords, setCoords] = useState({ lat: null, lng: null });
   const [selectedPlanta, setSelectedPlanta] = useState("");
   const [arrayPlantas, setArrayPlantas] = useState([]);
@@ -55,6 +56,7 @@ function RegisterObservation() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(file);
+        setPreviewImage(file);
       };
       reader.readAsDataURL(file);
     }
@@ -240,7 +242,7 @@ function RegisterObservation() {
               {image && (
                 <div className="mt-4">
                   <img
-                    src={image}
+                    src={previewImage}
                     alt="Uploaded"
                     className="w-full h-auto border-2 border-zinc-300 shadow-xl"
                     style={{ maxWidth: "110vw", maxHeight: "50vh" }}
