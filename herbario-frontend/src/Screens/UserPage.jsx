@@ -7,7 +7,7 @@ import TablePlants from "../assets/Components/TablePlants";
 const UserPage = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("Perfil");
-  const { setToken } = useUserStore((state) => state);
+  const { setToken, rol } = useUserStore((state) => state);
 
   const handleLogOut = () => {
     setToken(false),
@@ -42,28 +42,32 @@ const UserPage = () => {
           >
             Imagen de perfil
           </button>
-          <button
-            onClick={() => setSelectedOption("Historial")}
-            className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200"
-          >
-            Lista de plantas
-          </button>
-          <button
-            onClick={() => {
-              navigate("/RegisterPlant");
-            }}
-            className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200"
-          >
-            Registrar plantas
-          </button>
-          <button
-            onClick={() => {
-              navigate("/RegisterObservation");
-            }}
-            className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200"
-          >
-            Registrar observación
-          </button>
+          {rol != 0 && (
+            <>
+              <button
+                onClick={() => setSelectedOption("Historial")}
+                className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200"
+              >
+                Lista de plantas
+              </button>
+              <button
+                onClick={() => {
+                  navigate("/RegisterPlant");
+                }}
+                className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200"
+              >
+                Registrar plantas
+              </button>
+              <button
+                onClick={() => {
+                  navigate("/RegisterObservation");
+                }}
+                className="text-left text-2xl mb-8 p-4 border-b border-zinc-700/60 w-full hover:scale-110 transition-all duration-300 hover:bg-green-200"
+              >
+                Registrar observación
+              </button>
+            </>
+          )}
           <button
             onClick={handleLogOut}
             className="block text-2xl mb-8 p-4 border border-black bg-[#FF0000] text-[#FFFFFF] rounded-lg shadow-md hover:scale-110 transition-all hover:bg-red-700"

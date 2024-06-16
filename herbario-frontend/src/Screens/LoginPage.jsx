@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchLoginAPI, setClientToken } from '../Services/HerbarioService';
-import useUserStore from '../Global/UserStore';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  fetchLoginAPI,
+  obternerPermisos,
+  setClientToken,
+} from "../Services/HerbarioService";
+import useUserStore from "../Global/UserStore";
 
 function LoginPage() {
-  const {setToken, token} = useUserStore((state)=>state);
+  const { setToken, setRol } = useUserStore((state) => state);
   const navigate = useNavigate();
   const [loginForm, setLoginForm] = useState({
     correo: "",
-    password: ""
+    password: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -17,11 +21,14 @@ function LoginPage() {
     try {
       const response = await fetchLoginAPI(loginForm);
       if (response) {
-        setClientToken(response.token);
+        setClientToken(response);
         window.localStorage.setItem("token", response);
-        console.log(localStorage.getItem("token"))
-        setToken(true)
-        navigate('/');
+        console.log(localStorage.getItem("token"));
+        setToken(true);
+        const userResponse = await obternerPermisos(response);
+        setRol(userResponse.account.rol);
+
+        navigate("/");
       } else {
         setErrorMessage("Credenciales incorrectas");
       }
@@ -33,7 +40,7 @@ function LoginPage() {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setLoginForm(prevState => ({ ...prevState, [name]: value }));
+    setLoginForm((prevState) => ({ ...prevState, [name]: value }));
   }
 
   return (
@@ -52,13 +59,14 @@ function LoginPage() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           {errorMessage && (
-            <div className="mb-4 text-sm text-red-500">
-              {errorMessage}
-            </div>
+            <div className="mb-4 text-sm text-red-500">{errorMessage}</div>
           )}
           <form onSubmit={handleLogin}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Correo Electrónico
               </label>
               <div className="mt-2">
@@ -76,7 +84,10 @@ function LoginPage() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
                   Contraseña
                 </label>
               </div>
@@ -104,10 +115,10 @@ function LoginPage() {
           </form>
         </div>
         <p className="mt-10 text-center text-sm text-gray-500">
-          ¿No tienes cuenta?{' '}
+          ¿No tienes cuenta?{" "}
           <span
             className="font-semibold leading-6 text-green-700 hover:text-green-800 cursor-pointer"
-            onClick={() => navigate('/RegisterPage')}
+            onClick={() => navigate("/RegisterPage")}
           >
             ¡Regístrate!
           </span>

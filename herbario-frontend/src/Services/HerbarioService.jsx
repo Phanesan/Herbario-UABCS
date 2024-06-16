@@ -66,3 +66,11 @@ export async function eliminarPlant(id) {
   console.log(response);
   return response.data;
 }
+
+export async function obternerPermisos(token) {
+  const response = await routeAPI.get(`auth/account/${token}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  console.log(response);
+  return response.data;
+}
